@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  clerkUserId String   @unique @map("clerk_user_id")
+  email       String
+  name        String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+enum FinalType {
+  won
+  lost
+}
+
+/// CHECK constraint (enforced at application level via Zod + service):
+/// (is_final = true AND final_type IS NOT NULL) OR (is_final = false AND final_type IS NULL)
+model PipelineStage {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  position  Int        @unique
+  isFinal   Boolean    @default(false) @map("is_final")
+  finalType FinalType? @map("final_type")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@map("pipeline_stages")
+}
+
