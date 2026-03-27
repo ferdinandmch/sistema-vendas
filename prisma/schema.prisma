@@ -34,13 +34,17 @@ model PipelineStage {
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
 
-  deals     Deal[]
+  deals             Deal[]
+  fromStageHistory  DealStageHistory[] @relation("FromStage")
+  toStageHistory    DealStageHistory[] @relation("ToStage")
 
   @@map("pipeline_stages")
 }
 
 enum DealStatus {
   active
+  won
+  lost
 }
 
 model Deal {
@@ -61,10 +65,47 @@ model Deal {
   createdAt      DateTime     @default(now()) @map("created_at")
   updatedAt      DateTime     @updatedAt @map("updated_at")
 
-  stage          PipelineStage @relation(fields: [stageId], references: [id], onDelete: Restrict)
-  owner          User          @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  stage          PipelineStage    @relation(fields: [stageId], references: [id], onDelete: Restrict)
+  owner          User             @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  stageHistory   DealStageHistory[]
+  activities     Activity[]
 
   @@index([ownerId])
   @@map("deals")
+}
+
+model DealStageHistory {
+  id          String        @id @default(cuid())
+  dealId      String        @map("deal_id")
+  fromStageId String        @map("from_stage_id")
+  toStageId   String        @map("to_stage_id")
+  changedAt   DateTime      @default(now()) @map("changed_at")
+
+  deal        Deal          @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  fromStage   PipelineStage @relation("FromStage", fields: [fromStageId], references: [id], onDelete: Restrict)
+  toStage     PipelineStage @relation("ToStage", fields: [toStageId], references: [id], onDelete: Restrict)
+
+  @@index([dealId, changedAt])
+  @@map("deal_stage_history")
+}
+
+enum ActivityType {
+  note
+  call
+  meeting
+  followup
+}
+
+model Activity {
+  id        String       @id @default(cuid())
+  dealId    String       @map("deal_id")
+  type      ActivityType
+  content   String?
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  deal      Deal         @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([dealId, createdAt])
+  @@map("activities")
 }
 
