@@ -9,7 +9,9 @@ export type AppErrorCode =
   | "DUPLICATE_STAGE_POSITION"
   | "INVALID_FINAL_TYPE"
   | "STAGE_HAS_DEALS"
-  | "DEAL_NOT_FOUND";
+  | "DEAL_NOT_FOUND"
+  | "SAME_STAGE"
+  | "DEAL_ALREADY_CLOSED";
 
 export type FieldError = {
   field: string;
@@ -95,6 +97,22 @@ export function stageHasDealsError() {
 
 export function dealNotFoundError() {
   return new AppError("DEAL_NOT_FOUND", "Deal not found", 404);
+}
+
+export function sameStageError() {
+  return new AppError("SAME_STAGE", "Deal is already in this stage", 400);
+}
+
+export function dealAlreadyClosedError() {
+  return new AppError(
+    "DEAL_ALREADY_CLOSED",
+    "Cannot move a finalized deal",
+    400,
+  );
+}
+
+export function stageNotFoundForMoveError() {
+  return new AppError("STAGE_NOT_FOUND", "Target stage not found", 400);
 }
 
 export function isAppError(error: unknown): error is AppError {

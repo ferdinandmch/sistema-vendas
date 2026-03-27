@@ -25,3 +25,9 @@ export const updateDealSchema = z.object({
 
 export type CreateDealInput = z.infer<typeof createDealSchema>;
 export type UpdateDealInput = z.infer<typeof updateDealSchema>;
+
+export const moveDealSchema = z.object({
+  toStageId: z.string().min(1, "Stage ID is required"),
+});
+
+export type MoveDealInput = z.infer<typeof moveDealSchema>;

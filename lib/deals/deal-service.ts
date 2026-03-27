@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/db/prisma";
 import {
   AppError,
+  dealAlreadyClosedError,
   dealNotFoundError,
+  sameStageError,
+  stageNotFoundForMoveError,
 } from "@/lib/validation/api-error";
 import type { CreateDealInput, UpdateDealInput } from "@/lib/validation/deals";
 
@@ -73,5 +76,63 @@ export async function updateDeal(
     where: { id },
     data,
     include: { stage: { select: stageSelect } },
+  });
+}
+
+export async function moveDeal(
+  id: string,
+  toStageId: string,
+  ownerId: string,
+) {
+  const deal = await prisma.deal.findFirst({
+    where: { id, ownerId },
+  });
+
+  if (!deal) {
+    throw dealNotFoundError();
+  }
+
+  if (deal.status === "won" || deal.status === "lost") {
+    throw dealAlreadyClosedError();
+  }
+
+  if (deal.stageId === toStageId) {
+    throw sameStageError();
+  }
+
+  const targetStage = await prisma.pipelineStage.findUnique({
+    where: { id: toStageId },
+  });
+
+  if (!targetStage) {
+    throw stageNotFoundForMoveError();
+  }
+
+  const now = new Date();
+  const newStatus = targetStage.isFinal && targetStage.finalType
+    ? targetStage.finalType
+    : "active";
+
+  return prisma.$transaction(async (tx) => {
+    const updatedDeal = await tx.deal.update({
+      where: { id },
+      data: {
+        stageId: toStageId,
+        stageUpdatedAt: now,
+        status: newStatus,
+      },
+      include: { stage: { select: stageSelect } },
+    });
+
+    await tx.dealStageHistory.create({
+      data: {
+        dealId: id,
+        fromStageId: deal.stageId,
+        toStageId,
+        changedAt: now,
+      },
+    });
+
+    return updatedDeal;
   });
 }
