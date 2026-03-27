@@ -13,6 +13,7 @@ model User {
   email       String
   name        String
   createdAt   DateTime @default(now()) @map("created_at")
+  deals       Deal[]
 
   @@map("users")
 }
@@ -33,6 +34,37 @@ model PipelineStage {
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
 
+  deals     Deal[]
+
   @@map("pipeline_stages")
+}
+
+enum DealStatus {
+  active
+}
+
+model Deal {
+  id             String       @id @default(cuid())
+  companyName    String       @map("company_name")
+  contactName    String?      @map("contact_name")
+  contactDetails String?      @map("contact_details")
+  source         String?
+  experiment     String?
+  notes          String?
+  icp            Boolean      @default(false)
+  nextAction     String?      @map("next_action")
+  stageId        String       @map("stage_id")
+  stageUpdatedAt DateTime     @default(now()) @map("stage_updated_at")
+  status         DealStatus   @default(active)
+  lastTouchAt    DateTime?    @map("last_touch_at")
+  ownerId        String       @map("owner_id")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  stage          PipelineStage @relation(fields: [stageId], references: [id], onDelete: Restrict)
+  owner          User          @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  @@index([ownerId])
+  @@map("deals")
 }
 

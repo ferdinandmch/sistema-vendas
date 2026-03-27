@@ -8,7 +8,8 @@ export type AppErrorCode =
   | "DUPLICATE_STAGE_NAME"
   | "DUPLICATE_STAGE_POSITION"
   | "INVALID_FINAL_TYPE"
-  | "STAGE_HAS_DEALS";
+  | "STAGE_HAS_DEALS"
+  | "DEAL_NOT_FOUND";
 
 export type FieldError = {
   field: string;
@@ -90,6 +91,10 @@ export function stageHasDealsError() {
     "Cannot delete stage with associated deals",
     409,
   );
+}
+
+export function dealNotFoundError() {
+  return new AppError("DEAL_NOT_FOUND", "Deal not found", 404);
 }
 
 export function isAppError(error: unknown): error is AppError {

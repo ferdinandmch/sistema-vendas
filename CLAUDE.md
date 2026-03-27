@@ -1,9 +1,10 @@
 ﻿# pipeline-vendas Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-03-25
+Auto-generated from all feature plans. Last updated: 2026-03-26
 
 ## Active Technologies
 - PostgreSQL via Prisma (002-pipeline-stages)
+- TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod (003-deal-management)
 
 - TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod (001-clerk-auth)
 
@@ -24,10 +25,10 @@ pnpm test; pnpm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
-- 002-pipeline-stages: Added TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod
+- 003-deal-management: Added TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod
+- 003-deal-management: Added TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod
 - 002-pipeline-stages: Added TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod
 
-- 001-clerk-auth: Added TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod
 
 ## Speckit Workflow
 
