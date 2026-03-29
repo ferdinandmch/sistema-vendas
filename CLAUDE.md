@@ -9,6 +9,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-29
 - PostgreSQL via Prisma (somente leitura nesta feature) (006-stage-history)
 - TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod (007-api-refinada)
 - PostgreSQL via Prisma (somente leitura nesta feature — zero migracoes) (007-api-refinada)
+- TypeScript 5.x + Next.js 16 (App Router), Clerk v7, shadcn/ui + Tailwind CSS (a instalar), TanStack Query `@tanstack/react-query` (a instalar), lucide-react (a instalar com shadcn) (008-pipeline-ui)
+- PostgreSQL via Prisma (somente leitura nesta feature — zero migrações) (008-pipeline-ui)
 
 - TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod (001-clerk-auth)
 
@@ -29,9 +31,9 @@ pnpm test; pnpm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
+- 008-pipeline-ui: Added TypeScript 5.x + Next.js 16 (App Router), Clerk v7, shadcn/ui + Tailwind CSS (a instalar), TanStack Query `@tanstack/react-query` (a instalar), lucide-react (a instalar com shadcn)
 - 007-api-refinada: Added TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod
 - 007-api-refinada: Added TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod
-- 006-stage-history: Added TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod
 
 
 ## Speckit Workflow

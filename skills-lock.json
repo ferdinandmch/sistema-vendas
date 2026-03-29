@@ -41,6 +41,11 @@
       "sourceType": "github",
       "computedHash": "77faba608ea949351d1757e29e6cb726f6ec5937f7595be0593038a7d2d76bb9"
     },
+    "shadcn-ui": {
+      "source": "jezweb/claude-skills",
+      "sourceType": "github",
+      "computedHash": "f86d41cbe62c1224b77b673413a0141930a7d5d7054ea60a8192e354198cd71e"
+    },
     "systematic-debugging": {
       "source": "obra/superpowers",
       "sourceType": "github",
