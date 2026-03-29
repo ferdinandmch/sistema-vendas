@@ -7,6 +7,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-29
 - TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod (003-deal-management)
 - PostgreSQL via Prisma (transacoes com `$transaction`) (004-stage-movement)
 - PostgreSQL via Prisma (somente leitura nesta feature) (006-stage-history)
+- TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod (007-api-refinada)
+- PostgreSQL via Prisma (somente leitura nesta feature — zero migracoes) (007-api-refinada)
 
 - TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod (001-clerk-auth)
 
@@ -27,9 +29,9 @@ pnpm test; pnpm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
+- 007-api-refinada: Added TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod
+- 007-api-refinada: Added TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod
 - 006-stage-history: Added TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod
-- 006-stage-history: Added TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod
-- 005-deal-activities: Added TypeScript 5.x + Next.js App Router, Prisma, Clerk, Zod
 
 
 ## Speckit Workflow
