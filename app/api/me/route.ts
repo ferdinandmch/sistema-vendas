@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 
 import { requireAuthenticatedUser } from "@/lib/auth/require-auth";
-import { errorResponse, isAppError } from "@/lib/validation/api-error";
+import {
+  errorResponse,
+  isAppError,
+  syncFailedError,
+} from "@/lib/validation/api-error";
 
 export async function GET() {
   try {
@@ -19,12 +23,7 @@ export async function GET() {
     if (isAppError(error)) {
       return errorResponse(error);
     }
-
-    return errorResponse({
-      code: "SYNC_FAILED",
-      message: "Unable to resolve authenticated user context.",
-      status: 500,
-    });
+    throw syncFailedError();
   }
 }
 

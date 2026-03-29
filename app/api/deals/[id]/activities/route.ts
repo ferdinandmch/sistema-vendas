@@ -5,11 +5,8 @@ import {
   listActivities,
 } from "@/lib/activities/activity-service";
 import { requireAuthenticatedUser } from "@/lib/auth/require-auth";
-import {
-  errorResponse,
-  invalidRequestError,
-  isAppError,
-} from "@/lib/validation/api-error";
+import { errorResponse, isAppError } from "@/lib/validation/api-error";
+import { parseAndValidate } from "@/lib/validation/request-helpers";
 import { createActivitySchema } from "@/lib/validation/activities";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -19,25 +16,8 @@ export async function POST(request: Request, context: RouteContext) {
     const { user } = await requireAuthenticatedUser();
     const { id } = await context.params;
 
-    let rawBody: unknown;
-    try {
-      rawBody = await request.json();
-    } catch {
-      return errorResponse(
-        invalidRequestError("Request body must be valid JSON."),
-      );
-    }
-
-    const parsed = createActivitySchema.safeParse(rawBody);
-    if (!parsed.success) {
-      const details = parsed.error.issues.map((issue) => ({
-        field: issue.path.join("."),
-        message: issue.message,
-      }));
-      return errorResponse(invalidRequestError("Validation failed", details));
-    }
-
-    const activity = await createActivity(id, parsed.data, user.id);
+    const data = await parseAndValidate(request, createActivitySchema);
+    const activity = await createActivity(id, data, user.id);
     return NextResponse.json({ activity }, { status: 201 });
   } catch (error) {
     if (isAppError(error)) {
