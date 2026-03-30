@@ -53,6 +53,7 @@ export function PipelineColumn({
               key={deal.id}
               deal={deal}
               isPending={deal.id === pendingDealId}
+              href={`/deals/${deal.id}`}
             />
           ))
         )}
