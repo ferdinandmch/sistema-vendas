@@ -1,6 +1,6 @@
 ﻿# pipeline-vendas Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-03-29
+Auto-generated from all feature plans. Last updated: 2026-03-30
 
 ## Active Technologies
 - PostgreSQL via Prisma (002-pipeline-stages)
@@ -11,6 +11,9 @@ Auto-generated from all feature plans. Last updated: 2026-03-29
 - PostgreSQL via Prisma (somente leitura nesta feature — zero migracoes) (007-api-refinada)
 - TypeScript 5.x + Next.js 16 (App Router), Clerk v7, shadcn/ui + Tailwind CSS (a instalar), TanStack Query `@tanstack/react-query` (a instalar), lucide-react (a instalar com shadcn) (008-pipeline-ui)
 - PostgreSQL via Prisma (somente leitura nesta feature — zero migrações) (008-pipeline-ui)
+- TypeScript 5.x + Next.js 16 App Router, @dnd-kit/core, @dnd-kit/utilities, sonner, TanStack Query v5, shadcn/ui, Clerk v7 (009-pipeline-dnd)
+- TypeScript 5.x + Next.js 16 App Router, TanStack Query v5, shadcn/ui, Clerk v7, lucide-react (010-deal-page)
+- PostgreSQL via Prisma — zero migrações (schema já tem tudo) (012-deal-ui-loop)
 
 - TypeScript 5.x + Next.js App Router, Clerk, Prisma, Zod (001-clerk-auth)
 
@@ -31,9 +34,9 @@ pnpm test; pnpm run lint
 TypeScript 5.x: Follow standard conventions
 
 ## Recent Changes
-- 008-pipeline-ui: Added TypeScript 5.x + Next.js 16 (App Router), Clerk v7, shadcn/ui + Tailwind CSS (a instalar), TanStack Query `@tanstack/react-query` (a instalar), lucide-react (a instalar com shadcn)
-- 007-api-refinada: Added TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod
-- 007-api-refinada: Added TypeScript 5.x + Next.js 16 App Router, Prisma 6, Clerk v7, Zod
+- 012-deal-ui-loop: Added TypeScript 5.x + Next.js 16 App Router, TanStack Query v5, shadcn/ui, Clerk v7, lucide-react
+- 010-deal-page: Added TypeScript 5.x + Next.js 16 App Router, TanStack Query v5, shadcn/ui, Clerk v7, lucide-react
+- 009-pipeline-dnd: Added TypeScript 5.x + Next.js 16 App Router, @dnd-kit/core, @dnd-kit/utilities, sonner, TanStack Query v5, shadcn/ui, Clerk v7
 
 
 ## Speckit Workflow
@@ -73,6 +76,7 @@ Key files:
 When working on relevant tasks, consult these skill files automatically:
 - **shadcn/ui**: `.agents/skills/shadcn/SKILL.md` - When working with UI components
 - **Next.js best practices**: `.agents/skills/next-best-practices/SKILL.md` - When writing Next.js code
+- **Frontend design**: `.agents/skills/frontend-design/SKILL.md` - When building pages, components, or any UI — apply distinctive design direction, avoid generic aesthetics
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

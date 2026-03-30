@@ -2,11 +2,17 @@ import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/db/prisma";
 import {
+  duplicateFinalTypeError,
   duplicateStageNameError,
   duplicateStagePositionError,
+  stageHasDealsError,
   stageNotFoundError,
 } from "@/lib/validation/api-error";
-import type { CreateStageInput, UpdateStageInput } from "@/lib/validation/stages";
+import type {
+  CreateStageInput,
+  ReorderStagesInput,
+  UpdateStageInput,
+} from "@/lib/validation/stages";
 
 export async function listStages() {
   return prisma.pipelineStage.findMany({
@@ -15,6 +21,13 @@ export async function listStages() {
 }
 
 export async function createStage(data: CreateStageInput) {
+  if (data.isFinal && data.finalType) {
+    const existing = await prisma.pipelineStage.findFirst({
+      where: { finalType: data.finalType },
+    });
+    if (existing) throw duplicateFinalTypeError(data.finalType);
+  }
+
   try {
     return await prisma.pipelineStage.create({
       data: {
@@ -53,6 +66,13 @@ export async function updateStage(id: string, data: UpdateStageInput) {
     finalType = null;
   }
 
+  if (isFinal && finalType) {
+    const conflict = await prisma.pipelineStage.findFirst({
+      where: { finalType, id: { not: id } },
+    });
+    if (conflict) throw duplicateFinalTypeError(finalType);
+  }
+
   try {
     return await prisma.pipelineStage.update({
       where: { id },
@@ -85,5 +105,23 @@ export async function deleteStage(id: string) {
     throw stageNotFoundError();
   }
 
-  await prisma.pipelineStage.delete({ where: { id } });
+  const count = await prisma.deal.count({ where: { stageId: id } });
+  if (count > 0) throw stageHasDealsError(count);
+
+  await prisma.$transaction([
+    prisma.pipelineStage.delete({ where: { id } }),
+    prisma.pipelineStage.updateMany({
+      where: { position: { gt: existing.position } },
+      data: { position: { decrement: 1 } },
+    }),
+  ]);
+}
+
+export async function reorderStages(input: ReorderStagesInput) {
+  await prisma.$transaction(
+    input.stages.map(({ id, position }) =>
+      prisma.pipelineStage.update({ where: { id }, data: { position } }),
+    ),
+  );
+  return prisma.pipelineStage.findMany({ orderBy: { position: "asc" } });
 }

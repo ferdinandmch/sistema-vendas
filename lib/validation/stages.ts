@@ -64,5 +64,17 @@ export const updateStageSchema = z
     }
   });
 
+export const reorderStagesSchema = z.object({
+  stages: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        position: z.number().int().positive(),
+      }),
+    )
+    .min(1),
+});
+
 export type CreateStageInput = z.infer<typeof createStageSchema>;
 export type UpdateStageInput = z.infer<typeof updateStageSchema>;
+export type ReorderStagesInput = z.infer<typeof reorderStagesSchema>;

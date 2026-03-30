@@ -7,6 +7,7 @@ export type AppErrorCode =
   | "STAGE_NOT_FOUND"
   | "DUPLICATE_STAGE_NAME"
   | "DUPLICATE_STAGE_POSITION"
+  | "DUPLICATE_FINAL_TYPE"
   | "INVALID_FINAL_TYPE"
   | "STAGE_HAS_DEALS"
   | "DEAL_NOT_FOUND"
@@ -79,6 +80,14 @@ export function duplicateStagePositionError() {
   );
 }
 
+export function duplicateFinalTypeError(type: string) {
+  return new AppError(
+    "DUPLICATE_FINAL_TYPE",
+    `Já existe um stage com finalType '${type}'`,
+    409,
+  );
+}
+
 export function invalidFinalTypeError() {
   return new AppError(
     "INVALID_FINAL_TYPE",
@@ -87,11 +96,11 @@ export function invalidFinalTypeError() {
   );
 }
 
-export function stageHasDealsError() {
+export function stageHasDealsError(count: number) {
   return new AppError(
     "STAGE_HAS_DEALS",
-    "Cannot delete stage with associated deals",
-    409,
+    `Este stage tem ${count} deal(s) ativo(s). Mova-os antes de excluir.`,
+    400,
   );
 }
 

@@ -104,3 +104,70 @@ export async function moveDeal(dealId: string, toStageId: string): Promise<Deal>
   const data = (await res.json()) as { deal: Deal };
   return data.deal;
 }
+
+export async function createDeal(input: {
+  companyName: string;
+  stageId: string;
+  contactName?: string;
+  contactDetails?: string;
+  source?: string;
+  experiment?: string;
+  notes?: string;
+  icp?: boolean;
+  nextAction?: string;
+}): Promise<Deal> {
+  const res = await fetch("/api/deals", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    const data = (await res.json()) as { error: { message: string } };
+    throw new Error(data.error.message);
+  }
+  const data = (await res.json()) as { deal: Deal };
+  return data.deal;
+}
+
+export async function updateDeal(
+  id: string,
+  input: {
+    companyName?: string;
+    contactName?: string | null;
+    contactDetails?: string | null;
+    source?: string | null;
+    experiment?: string | null;
+    notes?: string | null;
+    icp?: boolean;
+    nextAction?: string | null;
+  },
+): Promise<Deal> {
+  const res = await fetch(`/api/deals/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    const data = (await res.json()) as { error: { message: string } };
+    throw new Error(data.error.message);
+  }
+  const data = (await res.json()) as { deal: Deal };
+  return data.deal;
+}
+
+export async function createActivity(
+  dealId: string,
+  input: { type: ActivityType; content: string },
+): Promise<Activity> {
+  const res = await fetch(`/api/deals/${dealId}/activities`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    const data = (await res.json()) as { error: { message: string } };
+    throw new Error(data.error.message);
+  }
+  const data = (await res.json()) as { activity: Activity };
+  return data.activity;
+}

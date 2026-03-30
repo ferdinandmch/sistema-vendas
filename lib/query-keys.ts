@@ -18,3 +18,8 @@ export const historyKeys = {
   all: ["history"] as const,
   list: (dealId: string) => [...historyKeys.all, "list", dealId] as const,
 };
+
+export const settingsStageKeys = {
+  all: ["settings", "stages"] as const,
+  list: () => [...settingsStageKeys.all, "list"] as const,
+};

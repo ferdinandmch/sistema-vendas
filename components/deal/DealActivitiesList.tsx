@@ -2,9 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { ActivityForm } from "@/components/deal/ActivityForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchActivities } from "@/lib/pipeline/api";
 import type { ActivityType } from "@/lib/pipeline/api";
@@ -41,6 +43,9 @@ export function DealActivitiesList({ dealId }: Props) {
         <CardTitle className="text-base">Activities</CardTitle>
       </CardHeader>
       <CardContent>
+        <ActivityForm dealId={dealId} />
+        <Separator className="my-4" />
+
         {isLoading && (
           <div className="space-y-2">
             <Skeleton className="h-10 w-full" />

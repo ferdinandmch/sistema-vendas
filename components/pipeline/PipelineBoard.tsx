@@ -16,7 +16,9 @@ import { toast } from "sonner";
 
 import { BoardSkeleton } from "@/components/pipeline/BoardSkeleton";
 import { DealCard } from "@/components/pipeline/DealCard";
+import { DealFormDialog } from "@/components/pipeline/DealFormDialog";
 import { PipelineColumn } from "@/components/pipeline/PipelineColumn";
+import { Button } from "@/components/ui/button";
 import { fetchDeals, fetchStages, moveDeal, type Deal } from "@/lib/pipeline/api";
 import { groupDealsByStage } from "@/lib/pipeline/group-deals";
 import { dealKeys, stageKeys } from "@/lib/query-keys";
@@ -107,20 +109,46 @@ export function PipelineBoard() {
 
   const stages = stagesQuery.data ?? [];
 
+  const sortedStages = [...(stages ?? [])].sort((a, b) => a.position - b.position);
+
   if (stages.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed p-12 text-center">
-        <p className="text-sm font-medium">Nenhum stage cadastrado</p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Crie stages via API antes de usar o pipeline visual.
-        </p>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div />
+          <DealFormDialog
+            stages={[]}
+            onSuccess={() => void queryClient.invalidateQueries({ queryKey: dealKeys.list() })}
+            trigger={
+              <Button disabled>
+                Novo deal
+              </Button>
+            }
+          />
+        </div>
+        <div className="rounded-lg border border-dashed p-12 text-center">
+          <p className="text-sm font-medium">Nenhum stage cadastrado</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            <a href="/settings/stages" className="underline">
+              Crie stages em /settings/stages
+            </a>{" "}
+            antes de usar o pipeline visual.
+          </p>
+        </div>
       </div>
     );
   }
 
-  const sortedStages = [...stages].sort((a, b) => a.position - b.position);
-
   return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div />
+        <DealFormDialog
+          stages={sortedStages}
+          onSuccess={() => void queryClient.invalidateQueries({ queryKey: dealKeys.list() })}
+          trigger={<Button>Novo deal</Button>}
+        />
+      </div>
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
@@ -141,5 +169,6 @@ export function PipelineBoard() {
         {activeDeal ? <DealCard deal={activeDeal} /> : null}
       </DragOverlay>
     </DndContext>
+    </div>
   );
 }
