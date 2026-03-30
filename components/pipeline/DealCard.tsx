@@ -1,3 +1,8 @@
+"use client";
+
+import { useDraggable } from "@dnd-kit/core";
+import { GripVertical } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Deal } from "@/lib/pipeline/api";
@@ -19,16 +24,38 @@ const STATUS_LABEL: Record<Deal["status"], string> = {
 
 type Props = {
   deal: Deal;
+  isPending?: boolean;
 };
 
-export function DealCard({ deal }: Props) {
+export function DealCard({ deal, isPending = false }: Props) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: deal.id,
+    data: { stageId: deal.stageId },
+    disabled: deal.status !== "active" || !!isPending,
+  });
+
   return (
     <Card
+      ref={setNodeRef}
       data-deal-id={deal.id}
-      className="mb-2 cursor-default select-none shadow-sm"
+      className={`mb-2 cursor-default select-none shadow-sm transition-opacity ${
+        isDragging ? "opacity-30" : isPending ? "opacity-50" : ""
+      }`}
     >
-      <CardContent className="p-3">
-        <p className="text-sm font-semibold leading-tight">{deal.companyName}</p>
+      <CardContent className="relative p-3">
+        {deal.status === "active" && !isPending && (
+          <button
+            {...listeners}
+            {...attributes}
+            className="absolute right-2 top-2 cursor-grab p-0.5 text-muted-foreground active:cursor-grabbing"
+            tabIndex={0}
+            aria-label="Arrastar deal"
+          >
+            <GripVertical className="h-4 w-4" />
+          </button>
+        )}
+
+        <p className="pr-6 text-sm font-semibold leading-tight">{deal.companyName}</p>
 
         {deal.contactName && (
           <p className="mt-0.5 text-xs text-muted-foreground">

@@ -2,6 +2,7 @@ import { UserButton } from "@clerk/nextjs";
 
 import { requireAuthenticatedUser } from "@/lib/auth/require-auth";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 export default async function PrivateLayout({
   children,
@@ -28,7 +29,10 @@ export default async function PrivateLayout({
         </div>
         <UserButton />
       </header>
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        {children}
+        <Toaster />
+      </QueryProvider>
     </main>
   );
 }

@@ -39,3 +39,14 @@ export async function fetchDeals(): Promise<Deal[]> {
   const data = (await res.json()) as { deals: Deal[] };
   return data.deals;
 }
+
+export async function moveDeal(dealId: string, toStageId: string): Promise<Deal> {
+  const res = await fetch(`/api/deals/${dealId}/move`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ toStageId }),
+  });
+  if (!res.ok) throw new Error("Failed to move deal");
+  const data = (await res.json()) as { deal: Deal };
+  return data.deal;
+}
