@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 
 import { requireAuthenticatedUser } from "@/lib/auth/require-auth";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 export default async function PrivateLayout({
   children,
@@ -27,7 +28,7 @@ export default async function PrivateLayout({
         </div>
         <UserButton />
       </header>
-      {children}
+      <QueryProvider>{children}</QueryProvider>
     </main>
   );
 }
