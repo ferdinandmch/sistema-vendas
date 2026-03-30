@@ -1,6 +1,10 @@
+import Link from "next/link";
+
 import { UserButton } from "@clerk/nextjs";
 
 import { requireAuthenticatedUser } from "@/lib/auth/require-auth";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 export default async function PrivateLayout({
   children,
@@ -25,9 +29,20 @@ export default async function PrivateLayout({
           </p>
           <h1 style={{ margin: "8px 0 0" }}>Ola, {authContext.user.name}</h1>
         </div>
-        <UserButton />
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <Link
+            href="/settings/stages"
+            style={{ fontSize: "0.875rem", color: "#4d6b95", textDecoration: "none" }}
+          >
+            Stages
+          </Link>
+          <UserButton />
+        </div>
       </header>
-      {children}
+      <QueryProvider>
+        {children}
+        <Toaster />
+      </QueryProvider>
     </main>
   );
 }
